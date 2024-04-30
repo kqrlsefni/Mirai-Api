@@ -9,40 +9,33 @@ import org.springframework.stereotype.Service;
 
 import Practica.MiraiApi.model.AreaModel;
 import Practica.MiraiApi.repository.IAreaRepository;
+import jakarta.transaction.Transactional;
 
 @Service
 public class AreaService {
     @Autowired
     IAreaRepository areaRepository;
 
-    public AreaModel create(AreaModel usuario){
-        return areaRepository.save(usuario);
+    public AreaModel create(AreaModel area){
+        return areaRepository.save(area);
     }
     
-    public Optional<AreaModel> getById(int id){
+    public Optional<AreaModel> findById(int id){
         return areaRepository.findById(id);
     }
 
-    public AreaModel update(AreaModel usuario) {
-        Optional<AreaModel> usuarioExistente = areaRepository.findById(usuario.getId());
-    
-        if (usuarioExistente.isPresent()) {
-            AreaModel usuarioActualizado = usuarioExistente.get();
-            usuarioActualizado.setNombre(usuario.getNombre());
-            usuarioActualizado.setSalBasico(usuario.getSalBasico());
-            return areaRepository.save(usuarioActualizado);
-        } else {
-            return null;
-        }
+    @Transactional
+    public AreaModel update(AreaModel area) {
+        return areaRepository.save(area);
     }
 
     
-    public List<AreaModel> findByAll() {
+    public List<AreaModel> findAll() {
         return (List<AreaModel>) areaRepository.findAll();
     }
 
 
-    public boolean eliminarUsuario(int id){
+    public boolean delete(int id){
         try{
 
             areaRepository.deleteById(id);

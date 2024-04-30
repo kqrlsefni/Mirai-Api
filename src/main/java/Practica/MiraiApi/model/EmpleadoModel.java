@@ -12,18 +12,36 @@ import jakarta.persistence.Table;
 public class EmpleadoModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="EmpCodigo")
-    public int codigo;
+    @Column(name="empid")
+    public int id;
 
-    @Column(name="Empnombres")    
+    @Column(name="empcodigo")    
+    public String codigo;
+
+    @Column(name="empdni")    
+    public String dni;
+
+    @Column(name="empnombres")    
     public String nombres;
 
-    @Column(name="EmpApePaterno")
+    @Column(name="empapepaterno")
     public String apePaterno;
-    @Column(name="EmpApeMaterno")
+
+    @Column(name="empapematerno")
     public String apeMaterno;
-    @Column(name="EmpSalBasico")
-    public String salBasico;
+
     @Column(name="EmpFechIngreso")
     public String fechIngreso;
+
+    @Column(name="empgenero")
+    public String genero;
+
+    @Column(name="emparea")
+    public int area;
+
+    @Column(name="empmodcontrato")
+    public int modContrato;
+
+    @Column(name="empjorlaboral")
+    public int jorLaboral;
 }

@@ -1,7 +1,5 @@
 package Practica.MiraiApi.controller;
 
-
-
 import java.util.List;
 import java.util.Optional;
 
@@ -10,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -18,36 +15,36 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import Practica.MiraiApi.model.AreaModel;
-import Practica.MiraiApi.service.AreaService;
+import Practica.MiraiApi.model.EmpleadoModel;
+import Practica.MiraiApi.service.EmpleadoService;
 
 @RestController
-@RequestMapping("api/area")
-public class AreaController {
+@RequestMapping("api/empleado")
+public class EmpleadoController {
     @Autowired
-    AreaService areaService;
+    EmpleadoService empleadoService;
 
     @PostMapping("/create")
-    public AreaModel create(@RequestBody AreaModel area) {
-        return areaService.create(area);
+    public EmpleadoModel create(@RequestBody EmpleadoModel empleado) {
+        return empleadoService.create(empleado);
     }
 
     @GetMapping("/findById/{id}")
-    public Optional<AreaModel> findById(@PathVariable int id) {
-        return areaService.findById(id);
+    public Optional<EmpleadoModel> findById(@PathVariable int id) {
+        return empleadoService.findById(id);
     }
 
     @PutMapping("/update")
-    public AreaModel update(@RequestBody AreaModel area) {
-        return areaService.update(area);
+    public EmpleadoModel update(@RequestBody EmpleadoModel empleado) {
+        return empleadoService.update(empleado);
     }
 
     @GetMapping("/findAll")
-    public ResponseEntity<List<AreaModel>> findAll() {
-        List<AreaModel> areas = areaService.findAll();
+    public ResponseEntity<List<EmpleadoModel>> findAll() {
+        List<EmpleadoModel> empleados = empleadoService.findAll();
 
-        if (!areas.isEmpty()) {
-            return new ResponseEntity<>(areas, HttpStatus.OK);
+        if (!empleados.isEmpty()) {
+            return new ResponseEntity<>(empleados, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -56,7 +53,7 @@ public class AreaController {
     
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> delete(@PathVariable("id") int id){
-        boolean ok= this.areaService.delete(id);
+        boolean ok= this.empleadoService.delete(id);
         if(ok) return new ResponseEntity<>("eliminado", HttpStatus.OK);
         else return new ResponseEntity<>("error",HttpStatus.BAD_REQUEST);
     }

@@ -8,17 +8,22 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="Area")
-public class AreaModel {
+@Table(name="Salario")
+public class SalarioModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="areid")
+    @Column(name="salid")
     public int id;
 
-    @Column(name="arenombre")    
-    public String nombre;
+    @Column(name="salempleado")    
+    public String empleado;
 
-    @Column(name="aresalbasico")
+    @Column(name="salbasico")
     public double salBasico;
-    
+
+    @Column(name="salneto")
+    public double salNeto;
+
+    @Column(name="salnetofecha")
+    public String salNetoFecha;
 }

@@ -8,17 +8,19 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="Area")
-public class AreaModel {
+@Table(name="modcontrato")
+public class ModContratoModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="areid")
+    @Column(name="modconid")
     public int id;
 
-    @Column(name="arenombre")    
+    @Column(name="modconnombre")    
     public String nombre;
 
-    @Column(name="aresalbasico")
-    public double salBasico;
-    
+    @Column(name="modconfechinicio")
+    public String fechaInicio;
+
+    @Column(name="modconfechfin")
+    public String fechaFin;
 }
