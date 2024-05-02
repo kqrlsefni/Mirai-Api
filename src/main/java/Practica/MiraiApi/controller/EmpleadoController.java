@@ -15,14 +15,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import Practica.MiraiApi.dto.EmpleadoDto;
-import Practica.MiraiApi.model.AreaModel;
+import Practica.MiraiApi.dto.EmpleadoAntiguedadDto;
+import Practica.MiraiApi.dto.EmpleadoEdadDto;
 import Practica.MiraiApi.model.EmpleadoModel;
-import Practica.MiraiApi.model.SalarioModel;
-import Practica.MiraiApi.repository.ISalarioRepository;
-import Practica.MiraiApi.service.AreaService;
 import Practica.MiraiApi.service.EmpleadoService;
-import Practica.MiraiApi.service.SalarioService;
+
 
 @RestController
 @RequestMapping("api/empleado")
@@ -65,8 +62,14 @@ public class EmpleadoController {
     }
 
     @GetMapping("getEdad")
-    public ResponseEntity<String> edad(@RequestBody EmpleadoDto empleadoDto){
+    public ResponseEntity<String> edad(@RequestBody EmpleadoEdadDto empleadoDto){
         int edad = empleadoService.edad(empleadoDto.fechaNacimiento);
         return new ResponseEntity<>("edad: "+edad, HttpStatus.OK);
+    }
+
+    @GetMapping("getAntiguedad")
+    public ResponseEntity<EmpleadoAntiguedadDto> antiguedad(@RequestBody EmpleadoAntiguedadDto empleadoDto){
+        EmpleadoAntiguedadDto antiguedad = empleadoService.antiguedad(empleadoDto.fechaIngreso);
+        return new ResponseEntity<>(antiguedad, HttpStatus.OK);
     }
 }

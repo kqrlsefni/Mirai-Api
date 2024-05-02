@@ -1,5 +1,5 @@
 package Practica.MiraiApi.dto;
 
-public class EmpleadoDto {
+public class EmpleadoEdadDto {
     public String fechaNacimiento;
 }
