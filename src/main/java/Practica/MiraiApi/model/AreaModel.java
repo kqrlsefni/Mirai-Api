@@ -21,4 +21,10 @@ public class AreaModel {
     @Column(name="aresalbasico")
     public double salBasico;
     
+
+    public double getSalBasico() {
+        return salBasico;
+    }    
+    
+    
 }

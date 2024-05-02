@@ -15,42 +15,31 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import Practica.MiraiApi.dto.EmpleadoDto;
-import Practica.MiraiApi.model.AreaModel;
-import Practica.MiraiApi.model.EmpleadoModel;
 import Practica.MiraiApi.model.SalarioModel;
-import Practica.MiraiApi.repository.ISalarioRepository;
-import Practica.MiraiApi.service.AreaService;
-import Practica.MiraiApi.service.EmpleadoService;
 import Practica.MiraiApi.service.SalarioService;
 
 @RestController
-@RequestMapping("api/empleado")
-public class EmpleadoController {
+@RequestMapping("api/salario")
+public class SalarioController {
     @Autowired
-    EmpleadoService empleadoService;
-
-    @PostMapping("/create")
-    public EmpleadoModel create(@RequestBody EmpleadoModel empleado) {
-        return empleadoService.create(empleado);
-    }
+    SalarioService salarioService;
 
     @GetMapping("/findById/{id}")
-    public Optional<EmpleadoModel> findById(@PathVariable int id) {
-        return empleadoService.findById(id);
+    public Optional<SalarioModel> findById(@PathVariable int id) {
+        return salarioService.findById(id);
     }
 
     @PutMapping("/update")
-    public EmpleadoModel update(@RequestBody EmpleadoModel empleado) {
-        return empleadoService.update(empleado);
+    public SalarioModel update(@RequestBody SalarioModel area) {
+        return salarioService.update(area);
     }
 
     @GetMapping("/findAll")
-    public ResponseEntity<List<EmpleadoModel>> findAll() {
-        List<EmpleadoModel> empleados = empleadoService.findAll();
+    public ResponseEntity<List<SalarioModel>> findAll() {
+        List<SalarioModel> areas = salarioService.findAll();
 
-        if (!empleados.isEmpty()) {
-            return new ResponseEntity<>(empleados, HttpStatus.OK);
+        if (!areas.isEmpty()) {
+            return new ResponseEntity<>(areas, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -59,14 +48,8 @@ public class EmpleadoController {
     
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> delete(@PathVariable("id") int id){
-        boolean ok= empleadoService.delete(id);
+        boolean ok= this.salarioService.delete(id);
         if(ok) return new ResponseEntity<>("eliminado", HttpStatus.OK);
         else return new ResponseEntity<>("error",HttpStatus.BAD_REQUEST);
-    }
-
-    @GetMapping("getEdad")
-    public ResponseEntity<String> edad(@RequestBody EmpleadoDto empleadoDto){
-        int edad = empleadoService.edad(empleadoDto.fechaNacimiento);
-        return new ResponseEntity<>("edad: "+edad, HttpStatus.OK);
     }
 }

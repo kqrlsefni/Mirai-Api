@@ -30,8 +30,11 @@ public class EmpleadoModel {
     @Column(name="empapematerno")
     public String apeMaterno;
 
-    @Column(name="EmpFechIngreso")
+    @Column(name="empfechingreso")
     public String fechIngreso;
+
+    @Column(name="empfechnacimiento")
+    public String fechNacimiento;
 
     @Column(name="empgenero")
     public String genero;
@@ -44,4 +47,14 @@ public class EmpleadoModel {
 
     @Column(name="empjorlaboral")
     public int jorLaboral;
+
+    public int getId() {
+        return id;
+    }
+
+    public int getArea() {
+        return area;
+    }
+
+    
 }

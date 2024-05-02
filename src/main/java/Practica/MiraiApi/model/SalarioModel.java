@@ -8,22 +8,33 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="Salario")
+@Table(name = "Salario")
 public class SalarioModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="salid")
+    @Column(name = "salid")
     public int id;
 
-    @Column(name="salempleado")    
-    public String empleado;
+    @Column(name = "salempleado")
+    public int empleado;
 
-    @Column(name="salbasico")
+    @Column(name = "salbasico")
     public double salBasico;
 
-    @Column(name="salneto")
+    @Column(name = "salneto")
     public double salNeto;
 
-    @Column(name="salnetofecha")
+    @Column(name = "salnetofecha")
     public String salNetoFecha;
+
+    public SalarioModel(int empleado, double salBasico) {
+        this.empleado = empleado;
+        this.salBasico = salBasico;
+    }
+
+    public SalarioModel() {
+    }
+
+    
+    
 }
