@@ -78,45 +78,31 @@ public class EmpleadoService {
     }
 
     public EmpleadoAntiguedadDto antiguedad(String ingreso){
-        long dias = 0;
         LocalDate fechaActual = LocalDate.now();
-        List<LocalDate> feriados = new ArrayList<>();
-        feriados.add(LocalDate.of(fechaActual.getYear(), 1, 1));
-        feriados.add(LocalDate.of(fechaActual.getYear(), 3, 28));
-        feriados.add(LocalDate.of(fechaActual.getYear(), 3, 29));
-        feriados.add(LocalDate.of(fechaActual.getYear(), 5, 1));
-        feriados.add(LocalDate.of(fechaActual.getYear(), 6, 7));
-        feriados.add(LocalDate.of(fechaActual.getYear(), 6, 29));
-        feriados.add(LocalDate.of(fechaActual.getYear(), 7, 23));
-        feriados.add(LocalDate.of(fechaActual.getYear(), 7, 28));
-        feriados.add(LocalDate.of(fechaActual.getYear(), 7, 29));
-        feriados.add(LocalDate.of(fechaActual.getYear(), 8, 6));
-        feriados.add(LocalDate.of(fechaActual.getYear(), 8, 30));
-        feriados.add(LocalDate.of(fechaActual.getYear(), 10, 8));
-        feriados.add(LocalDate.of(fechaActual.getYear(), 11, 1));
-        feriados.add(LocalDate.of(fechaActual.getYear(), 12, 8));
-        feriados.add(LocalDate.of(fechaActual.getYear(), 12, 9));
-        feriados.add(LocalDate.of(fechaActual.getYear(), 12, 25));
-        
         LocalDate fechaIngreso = LocalDate.parse(ingreso, fechaFormato);
-        long diasTotales = ChronoUnit.DAYS.between(fechaIngreso, fechaActual) + 1;
-        long domingos = ChronoUnit.DAYS.between(fechaIngreso, fechaActual) / 7;
-        dias = diasTotales - domingos;
-        EmpleadoAntiguedadDto antiguedad = new EmpleadoAntiguedadDto();
-        for (LocalDate feriado : feriados) {
-            if (feriado.isAfter(fechaIngreso) && feriado.isBefore(fechaActual.plusDays(1))) {
-                dias--;
-            }
-        }
-        antiguedad.dias = Optional.of(dias);
-        int dia = (int) (dias%30);
+        long dias = ChronoUnit.DAYS.between(fechaIngreso, fechaActual) + 1;
         long mes = ChronoUnit.MONTHS.between(fechaIngreso, fechaActual);
         long año = ChronoUnit.YEARS.between(fechaIngreso, fechaActual);
-        antiguedad.formato = Optional.of(año + ";" + mes + ";" + dia);
+        long ajusteDias = ChronoUnit.DAYS.between(fechaIngreso.plusMonths(mes), fechaActual);
+        EmpleadoAntiguedadDto antiguedad = new EmpleadoAntiguedadDto();
+        antiguedad.dias = Optional.of(dias);
+        antiguedad.formato = Optional.of(año + ";" + mes + ";" + ajusteDias);
+        antiguedad.fechaIngreso = ingreso;
         return antiguedad;
     }
 
     // public double salarioNeto(){
 
     // }
+
+    public long diasLaborables(String ingreso){
+        long diasLaborables = 0;
+        LocalDate fechaActual = LocalDate.now();
+        LocalDate fechaIngreso = LocalDate.parse(ingreso, fechaFormato);
+        long mes = ChronoUnit.MONTHS.between(fechaIngreso, fechaActual);
+        long ajusteDias = ChronoUnit.DAYS.between(fechaIngreso.plusMonths(mes), fechaActual) + 1;
+        long dias = mes*30;
+        diasLaborables = dias + ajusteDias;
+        return diasLaborables;
+    }
 }
