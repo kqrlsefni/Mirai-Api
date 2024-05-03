@@ -15,9 +15,6 @@ public class SalarioModel {
     @Column(name = "salid")
     public int id;
 
-    @Column(name = "salempleado")
-    public int empleado;
-
     @Column(name = "salbasico")
     public double salBasico;
 
@@ -27,8 +24,7 @@ public class SalarioModel {
     @Column(name = "salnetofecha")
     public String salNetoFecha;
 
-    public SalarioModel(int empleado, double salBasico) {
-        this.empleado = empleado;
+    public SalarioModel(double salBasico) {
         this.salBasico = salBasico;
     }
 

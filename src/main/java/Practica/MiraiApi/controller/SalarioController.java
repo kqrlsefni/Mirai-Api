@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import Practica.MiraiApi.dto.EmpleadoSalarioDto;
 import Practica.MiraiApi.model.SalarioModel;
 import Practica.MiraiApi.service.SalarioService;
 
@@ -50,5 +51,10 @@ public class SalarioController {
         boolean ok= this.salarioService.delete(id);
         if(ok) return new ResponseEntity<>("eliminado", HttpStatus.OK);
         else return new ResponseEntity<>("error",HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping("/getSalarioNeto")
+    public ResponseEntity<String> getSalarioNeto(@RequestBody EmpleadoSalarioDto empleadoSalarioDto) {
+        return new ResponseEntity<>("salario neto: "+salarioService.salarioNeto(empleadoSalarioDto),HttpStatus.OK);
     }
 }

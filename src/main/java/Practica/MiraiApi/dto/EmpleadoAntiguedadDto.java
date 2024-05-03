@@ -6,4 +6,5 @@ public class EmpleadoAntiguedadDto {
     public String fechaIngreso;
     public Optional<Long> dias;
     public Optional<String> formato;
+    public Optional<Long> años;
 }

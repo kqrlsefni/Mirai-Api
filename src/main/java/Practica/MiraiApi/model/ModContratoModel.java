@@ -23,4 +23,15 @@ public class ModContratoModel {
 
     @Column(name="modconfechfin")
     public String fechaFin;
+
+    public ModContratoModel(String nombre, String fechaInicio, String fechaFin) {
+        this.nombre = nombre;
+        this.fechaInicio = fechaInicio;
+        this.fechaFin = fechaFin;
+    }
+
+    public ModContratoModel() {
+    }
+
+    
 }

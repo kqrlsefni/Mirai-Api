@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import Practica.MiraiApi.dto.EmpleadoAntiguedadDto;
 import Practica.MiraiApi.dto.EmpleadoEdadDto;
+import Practica.MiraiApi.dto.EmpleadoRegistroDto;
 import Practica.MiraiApi.model.EmpleadoModel;
 import Practica.MiraiApi.service.EmpleadoService;
 
@@ -28,8 +29,8 @@ public class EmpleadoController {
     EmpleadoService empleadoService;
 
     @PostMapping("/create")
-    public EmpleadoModel create(@RequestBody EmpleadoModel empleado) {
-        return empleadoService.create(empleado);
+    public EmpleadoModel create(@RequestBody EmpleadoRegistroDto empleadoRegistroDto) {
+        return empleadoService.create(empleadoRegistroDto);
     }
 
     @GetMapping("/findById/{id}")

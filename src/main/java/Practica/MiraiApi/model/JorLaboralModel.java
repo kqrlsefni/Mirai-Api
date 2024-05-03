@@ -19,5 +19,5 @@ public class JorLaboralModel {
     public String nombre;
 
     @Column(name="jorlabhoras")
-    public int horas;
+    public int horas; 
 }

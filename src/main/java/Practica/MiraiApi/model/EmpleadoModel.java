@@ -31,13 +31,16 @@ public class EmpleadoModel {
     public String apeMaterno;
 
     @Column(name="empfechingreso")
-    public String fechIngreso;
+    public String fechaIngreso;
 
     @Column(name="empfechnacimiento")
-    public String fechNacimiento;
+    public String fechaNacimiento;
 
     @Column(name="empgenero")
     public String genero;
+
+    @Column(name="empsalbasico")
+    public int salBasico;
 
     @Column(name="emparea")
     public int area;
@@ -56,5 +59,26 @@ public class EmpleadoModel {
         return area;
     }
 
+    public EmpleadoModel() {
+    }
+
+    public EmpleadoModel(String codigo, String dni, String nombres, String apePaterno, String apeMaterno,
+            String fechaIngreso, String fechaNacimiento, String genero, int salBasico, int area, int modContrato,
+            int jorLaboral) {
+        this.codigo = codigo;
+        this.dni = dni;
+        this.nombres = nombres;
+        this.apePaterno = apePaterno;
+        this.apeMaterno = apeMaterno;
+        this.fechaIngreso = fechaIngreso;
+        this.fechaNacimiento = fechaNacimiento;
+        this.genero = genero;
+        this.salBasico = salBasico;
+        this.area = area;
+        this.modContrato = modContrato;
+        this.jorLaboral = jorLaboral;
+    }
+
+    
     
 }
