@@ -1,26 +1,37 @@
 package Practica.MiraiApi.service;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import Practica.MiraiApi.dto.EmpleadoAntiguedadDto;
 import Practica.MiraiApi.dto.EmpleadoSalarioDto;
 import Practica.MiraiApi.dto.RemuneracionesDto;
+import Practica.MiraiApi.dto.SalarioNetoDto;
+import Practica.MiraiApi.model.EmpleadoModel;
 import Practica.MiraiApi.model.SalarioModel;
 import Practica.MiraiApi.repository.IEmpleadoRepository;
 import Practica.MiraiApi.repository.ISalarioRepository;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 
 @Service
 public class SalarioService {
     @Autowired
     ISalarioRepository salarioRepository;
+    @Autowired
     IEmpleadoRepository empleadoRepository;
     RemuneracionesDto remuneracionesDto = new RemuneracionesDto();
     EmpleadoService empleadoService = new EmpleadoService();
@@ -56,9 +67,16 @@ public class SalarioService {
         }
     }
 
-    public double salarioNeto(EmpleadoSalarioDto salarioDto){
+    public SalarioNetoDto salarioNeto(int id){
+        EmpleadoModel salarioModel = empleadoRepository.findById(id).get();
+        EmpleadoSalarioDto salarioDto = new EmpleadoSalarioDto(
+            salarioModel.salario.id,
+            salarioModel.contrato.fechaInicio,
+            salarioModel.contrato.fechaFin,
+            salarioModel.fechaNacimiento
+        );
         LocalDate fechaFin = LocalDate.parse(salarioDto.fechaFin,fechaFormato);
-        double  salarioNeto = 0, impuesto=0,afp=0,salud=0, cts=0;
+        double  salarioNeto = 0, impuesto=0,salud=0, cts=0,jd=0,edad=0,antiguedad=0,general=0;
         SalarioModel salario = salarioRepository.findById(salarioDto.salId).get();
         int edadEmpleado = empleadoService.edad(salarioDto.fechaNacimiento);
         long antiguedadEmpleado = empleadoService.antiguedad(salarioDto.fechaInicio).años.get();
@@ -67,18 +85,28 @@ public class SalarioService {
         salud = salarioNeto * remuneracionesDto.salud;
         LocalDate fechaActual = LocalDate.now();
         salarioNeto += remuneracionesDto.bonoGeneral;
-        if(fechaActual.getMonthValue() == 6 || fechaActual.getMonthValue() == 12)
+        general = remuneracionesDto.bonoGeneral;
+        if(fechaActual.getMonthValue() == 6 || fechaActual.getMonthValue() == 12){
             salarioNeto += remuneracionesDto.gratificacionJD;
-        if(edadEmpleado >= remuneracionesDto.edad)
+            jd = remuneracionesDto.gratificacionJD;
+        }      
+        if(edadEmpleado >= remuneracionesDto.edad){
             salarioNeto += remuneracionesDto.bonoEdad;
-        if((int) antiguedadEmpleado >= remuneracionesDto.antiguedad)
+            edad = remuneracionesDto.bonoEdad;
+        }  
+        if((int) antiguedadEmpleado >= remuneracionesDto.antiguedad){
             salarioNeto += remuneracionesDto.bonoAntiguedad;
-        salarioNeto = salarioNeto - impuesto - afp - salud;
+            antiguedad = remuneracionesDto.bonoAntiguedad;
+        }
+        salarioNeto = salarioNeto - impuesto - salud;
         if(fechaFin.isEqual(fechaActual)){
             cts = liquidacion(salarioDto);
         }
-        salarioNeto -= cts;
-        return salarioNeto;
+        salarioNeto += cts;
+        SalarioNetoDto netoDto = new SalarioNetoDto(
+            jd,general,antiguedad,edad,impuesto,salud,cts,salarioNeto
+        );
+        return netoDto;
     }
 
     public double liquidacion(EmpleadoSalarioDto salarioDto){
@@ -91,4 +119,22 @@ public class SalarioService {
         double cts = salario.salBasico + gratificacion/6;
         return cts;
     }
+
+    public ByteArrayInputStream exportarExcel() throws Exception{
+        HSSFWorkbook workbook = new HSSFWorkbook();
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        HSSFSheet sheet = workbook.createSheet("Empleado Pago");
+
+        HSSFRow row = sheet.createRow(1);
+        sheet.addMergedRegion(CellRangeAddress.valueOf("A2:Q2"));
+		row.createCell(0).setCellValue("BOLETA DE PAGO");
+
+		int dataRowIndex = 1;
+
+		workbook.write(stream);
+		workbook.close();
+		//ops.close();
+        return new ByteArrayInputStream(stream.toByteArray());
+    }
+
 }

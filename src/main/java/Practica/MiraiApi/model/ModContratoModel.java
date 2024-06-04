@@ -1,10 +1,14 @@
 package Practica.MiraiApi.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.MapsId;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -23,6 +27,9 @@ public class ModContratoModel {
 
     @Column(name="modconfechfin")
     public String fechaFin;
+
+    // @OneToOne(cascade = CascadeType.ALL)
+    // public EmpleadoModel empleado;
 
     public ModContratoModel(String nombre, String fechaInicio, String fechaFin) {
         this.nombre = nombre;

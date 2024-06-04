@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import Practica.MiraiApi.dto.EmpleadoAntiguedadDto;
 import Practica.MiraiApi.dto.EmpleadoRegistroDto;
+import Practica.MiraiApi.dto.Response.EmpDeleteRes;
 import Practica.MiraiApi.model.AreaModel;
 import Practica.MiraiApi.model.EmpleadoModel;
 import Practica.MiraiApi.model.JorLaboralModel;
@@ -36,29 +37,10 @@ public class EmpleadoService {
     SalarioModel salario;
     ModContratoModel modContrato;
     DateTimeFormatter fechaFormato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    EmpDeleteRes deleteRes;
 
-
-    public EmpleadoModel create(EmpleadoRegistroDto empleadoRegistroDto){
-        salario = new SalarioModel(empleadoRegistroDto.salarioBasico);
-        salarioRepository.save(salario);
-        modContrato = new ModContratoModel(empleadoRegistroDto.modContrato,empleadoRegistroDto.fechaInicio,empleadoRegistroDto.fechaFin);
-        modContratoRepository.save(modContrato);
-        empleado = new EmpleadoModel(
-            empleadoRegistroDto.codigo,
-            empleadoRegistroDto.dni,
-            empleadoRegistroDto.nombres,
-            empleadoRegistroDto.apePaterno,
-            empleadoRegistroDto.apeMaterno,
-            empleadoRegistroDto.fechIngreso,
-            empleadoRegistroDto.fechNacimiento,
-            empleadoRegistroDto.genero,
-            salario.id,
-            empleadoRegistroDto.area,
-            modContrato.id,
-            empleadoRegistroDto.jornada
-        );
-        empleado = empleadoRepository.save(empleado);   
-        return this.empleado;
+    public EmpleadoModel create(EmpleadoModel empleado){  
+        return empleadoRepository.save(empleado);
     }
     
     public Optional<EmpleadoModel> findById(int id){
@@ -76,13 +58,16 @@ public class EmpleadoService {
     }
 
 
-    public boolean delete(int id){
+    public EmpDeleteRes delete(int id){
+        deleteRes = new EmpDeleteRes();
         try{
-
             empleadoRepository.deleteById(id);
-            return true;
+            deleteRes.setEliminado(true);
+            return deleteRes;
         }catch(Exception arr){
-            return false;
+            deleteRes.setEliminado(false);
+            return deleteRes;
+
 
         }
     }
@@ -100,13 +85,15 @@ public class EmpleadoService {
     public EmpleadoAntiguedadDto antiguedad(String ingreso){
         LocalDate fechaActual = LocalDate.now();
         LocalDate fechaIngreso = LocalDate.parse(ingreso, fechaFormato);
-        long dias = ChronoUnit.DAYS.between(fechaIngreso, fechaActual) + 1;
+        long dias = ChronoUnit.DAYS.between(fechaIngreso, fechaActual);
         long mes = ChronoUnit.MONTHS.between(fechaIngreso, fechaActual);
         long año = ChronoUnit.YEARS.between(fechaIngreso, fechaActual);
         long ajusteDias = ChronoUnit.DAYS.between(fechaIngreso.plusMonths(mes), fechaActual);
         EmpleadoAntiguedadDto antiguedad = new EmpleadoAntiguedadDto();
+        long Nmes = mes % 12;
+        //Nmes = Nmes - año;
         antiguedad.dias = Optional.of(dias);
-        antiguedad.formato = Optional.of(año + ";" + mes + ";" + ajusteDias);
+        antiguedad.formato = Optional.of(año + " Años   " + Nmes + " Meses   " + ajusteDias + " Días ");
         antiguedad.fechaIngreso = ingreso;
         antiguedad.años = Optional.of(año);
         return antiguedad;

@@ -1,10 +1,21 @@
 package Practica.MiraiApi.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapsId;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 
 @Entity
@@ -39,46 +50,37 @@ public class EmpleadoModel {
     @Column(name="empgenero")
     public String genero;
 
-    @Column(name="empsalbasico")
-    public int salBasico;
+     // @Column(name="empsalbasico")
+    // public int salBasico;
 
-    @Column(name="emparea")
-    public int area;
-
-    @Column(name="empmodcontrato")
-    public int modContrato;
+    // @Column(name="empmodcontrato")
+    // public int modContrato;
 
     @Column(name="empjorlaboral")
     public int jorLaboral;
 
-    public int getId() {
-        return id;
-    }
+    @Column(name="emparea")
+    public int areaId;
 
-    public int getArea() {
-        return area;
-    }
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="empsalbasico", referencedColumnName = "salid")
+    public SalarioModel salario;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="empmodcontrato", referencedColumnName = "modconid")
+    public ModContratoModel contrato;
+
+    // @ManyToOne
+    // @JoinColumn(name="emparea")
+    // @JsonBackReference
+    // public AreaModel area;
+
+    // @ManyToOne
+    // @JoinColumn(name = "empjorlaboral")
+    // @JsonBackReference
+    // public JorLaboralModel jornada;
 
     public EmpleadoModel() {
     }
-
-    public EmpleadoModel(String codigo, String dni, String nombres, String apePaterno, String apeMaterno,
-            String fechaIngreso, String fechaNacimiento, String genero, int salBasico, int area, int modContrato,
-            int jorLaboral) {
-        this.codigo = codigo;
-        this.dni = dni;
-        this.nombres = nombres;
-        this.apePaterno = apePaterno;
-        this.apeMaterno = apeMaterno;
-        this.fechaIngreso = fechaIngreso;
-        this.fechaNacimiento = fechaNacimiento;
-        this.genero = genero;
-        this.salBasico = salBasico;
-        this.area = area;
-        this.modContrato = modContrato;
-        this.jorLaboral = jorLaboral;
-    }
-
-    
-    
+ 
 }
